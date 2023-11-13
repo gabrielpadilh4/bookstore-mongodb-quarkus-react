@@ -11,7 +11,14 @@ export default function ShowBook() {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`http://localhost:8080/api/books/${id}`)
+
+        const bearerToken = localStorage.getItem("react-token");
+
+        const axiosConfig = {
+            headers: { Authorization : `Bearer ${bearerToken}`}
+        }
+
+        axios.get(`http://localhost:8080/api/books/${id}`, axiosConfig)
         .then((response) => {
             setBook(response.data);
             setLoading(false);

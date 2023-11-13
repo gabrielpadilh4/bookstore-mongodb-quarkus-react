@@ -14,7 +14,14 @@ export default function DeleteBook() {
     
     function handleDeleteBook() {
         setLoading(true);
-        axios.delete(`http://localhost:8080/api/books/${id}`)
+
+        const bearerToken = localStorage.getItem("react-token");
+
+        const axiosConfig = {
+            headers: { Authorization : `Bearer ${bearerToken}`}
+        }
+
+        axios.delete(`http://localhost:8080/api/books/${id}`, axiosConfig)
         .then(() => {
             setLoading(false);
             enqueueSnackbar("Book deleted successfully", { variant: "success"});

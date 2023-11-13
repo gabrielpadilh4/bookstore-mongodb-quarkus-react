@@ -16,7 +16,14 @@ export default function CreateBook() {
     function handleSaveBook() {
         const data = { title, author, publishYear };
         setLoading(true);
-        axios.post("http://localhost:8080/api/books", data)
+
+        const bearerToken = localStorage.getItem("react-token");
+
+        const axiosConfig = {
+            headers: { Authorization : `Bearer ${bearerToken}`}
+        }
+
+        axios.post("http://localhost:8080/api/books", data, axiosConfig)
         .then(() => {
             setLoading(false);
             enqueueSnackbar("Book created successfully", { variant: "success"});

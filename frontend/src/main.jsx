@@ -7,7 +7,7 @@ import { SnackbarProvider } from 'notistack';
 import Keycloak from "keycloak-js";
 
 var initOptions = {
-    url: 'http://0.0.0.0:8081', 
+    url: 'http://localhost:8081', 
     realm: 'bookstore', 
     clientId: 'bookstore-frontend', 
     onLoad: 'login-required'
@@ -33,14 +33,15 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
   localStorage.setItem("react-refresh-token", keycloak.refreshToken);
 
   setTimeout(() => {
-      keycloak.updateToken(70).success((refreshed) => {
+
+      keycloak.updateToken(70).then((refreshed) => {
           if (refreshed) {
               console.debug('Token refreshed' + refreshed);
           } else {
               console.warn('Token not refreshed, valid for '
                   + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
           }
-      }).error(() => {
+      }).catch(() => {
           console.error('Failed to refresh token');
       });
 

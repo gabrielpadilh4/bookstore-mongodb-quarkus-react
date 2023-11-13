@@ -6,28 +6,39 @@ import { Link } from "react-router-dom";
 import { MdOutlineAddBox } from "react-icons/md";
 import BooksCard from "../components/BooksCard";
 import BooksTable from "../components/BooksTable";
+import { useSnackbar } from "notistack";
+import LogoutButton from "../components/LogoutButton";
 
-export default function Home() {
+export default function Home({keycloak}) {
 
     const [books, setBooks] = useState([])
     const [loading, setLoading] = useState(false);
     const [showType, setShowType] = useState('table');
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         setLoading(true);
-        axios.get('http://localhost:8080/api/books')
+
+        const bearerToken = localStorage.getItem("react-token");
+
+        const axiosConfig = {
+            headers: { Authorization : `Bearer ${bearerToken}`}
+        }
+
+        axios.get('http://localhost:8080/api/books',axiosConfig)
         .then((response) => {
             setBooks(response.data);
             setLoading(false);
         })
         .catch((error) => {
-            console.log(error);
+            enqueueSnackbar(error, { variant: "error"})
             setLoading(false);
         });
     }, []);
 
     return (
         <div className="p-4">
+            <LogoutButton keycloak={keycloak} />
             <div className="flex justify-center items-center gap-x-4">
                 <button className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg" onClick={() => setShowType('table')}>
                     Table

@@ -8,13 +8,10 @@ import ShowBook from './pages/ShowBook';
 import NoPermission from "./pages/NoPermission"
 
 export default function App({keycloak}) {
-
-  console.log(keycloak.hasRealmRole('admin'));
-
   return (
     <Routes>
-      <Route path='/' element={<Home />}/>
-      <Route path='/books/create' element={keycloak.hasRealmRole('admin') && !!keycloak.token ? <CreateBook /> : <NoPermission/>}/>
+      <Route path='/' element={<Home keycloak={keycloak}/>}/>
+      <Route path='/books/create' element={keycloak.hasRealmRole('admin') && !!keycloak.token ? <CreateBook/> : <NoPermission/>}/>
       <Route path='/books/details/:id' element={<ShowBook />}/>
       <Route path='/books/edit/:id' element={<EditBook />}/>
       <Route path='/books/delete/:id' element={<DeleteBook />}/>

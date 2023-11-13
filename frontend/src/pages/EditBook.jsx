@@ -15,7 +15,14 @@ export default function EditBook() {
     const { enqueueSnackbar } = useSnackbar();
     useEffect(() => {
         setLoading(true);
-        axios.get(`http://localhost:8080/api/books/${id}`)
+        
+        const bearerToken = localStorage.getItem("react-token");
+
+        const axiosConfig = {
+            headers: { Authorization : `Bearer ${bearerToken}`}
+        }
+
+        axios.get(`http://localhost:8080/api/books/${id}`, axiosConfig)
         .then((response) => {
             setLoading(false);
             setTitle(response.data.title);

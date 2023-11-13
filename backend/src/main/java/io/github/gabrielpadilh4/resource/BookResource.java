@@ -2,6 +2,9 @@ package io.github.gabrielpadilh4.resource;
 
 import io.github.gabrielpadilh4.resource.dto.BookDTO;
 import io.github.gabrielpadilh4.service.BookService;
+import io.quarkus.security.Authenticated;
+import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -9,12 +12,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.keycloak.authorization.client.AuthzClient;
 
 import java.net.URI;
 
 @Path("/books")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed("admin")
 public class BookResource {
 
     @Inject
